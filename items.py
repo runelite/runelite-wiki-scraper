@@ -46,8 +46,8 @@ def run():
 				doc["slot"] = slotIDs[str(version["slot"]).strip().lower()]
 
 				for key in [
-					"astab", "aslash", "acrush", "amagic", "arange", "dstab", "dslash", "dcrush", "dmagic", "drange", "str", "rstr", "mdmg",
-					"prayer", "aspeed"
+					"astab", "aslash", "acrush", "amagic", "arange", "dstab", "dslash", "dcrush", "dmagic", "drange", "str",
+					"rstr", "mdmg", "prayer", "aspeed"
 				]:
 					if key in version:
 						strval = str(version[key]).strip()
@@ -76,11 +76,11 @@ def run():
 						stats[id] = doc
 
 				if "quest" in version:
-					quest = str(version["quest"]).lower().strip();
+					quest = str(version["quest"]).lower().strip()
 					if quest != "" and quest != "no":
 						doc["quest"] = True
 
-				equipable = "equipable" in version and str(version["equipable"]).strip().lower() == "yes"
+				equipable = "equipable" in version and "yes" in str(version["equipable"]).strip().lower()
 
 				if "weight" in version:
 					strval = str(version["weight"]).strip()
@@ -90,16 +90,17 @@ def run():
 						red = WEIGHT_REDUCTION_EXTRACTOR.match(strval)
 						if red:
 							strval = red.group(2)
-						floatval =float(strval)
+						floatval = float(strval)
 						if floatval != 0:
 							doc["weight"] = floatval
 
 				equipVid = vid if vid in equips else -1 if -1 in equips else None
 				if equipVid != None:
-					if not equipable:
-						print("Item {} has Infobox Bonuses but not equipable".format(name))
-					doc["equipable"] = True
-					doc["equipment"] = equips[equipVid]
+					if equipable or not "broken" in version["name"].lower():
+						if not equipable:
+							print("Item {} has Infobox Bonuses but not equipable".format(name))
+						doc["equipable"] = True
+						doc["equipment"] = equips[equipVid]
 				elif equipable:
 					print("Item {} has equipable but not Infobox Bonuses".format(name))
 					doc["equipable"] = True
@@ -108,7 +109,7 @@ def run():
 			print("Item {} failed:".format(name))
 			traceback.print_exc()
 
-	orderedStats = collections.OrderedDict(sorted(filter(lambda e : e[1] != {}, stats.items()), key=lambda k: int(k[0])))
+	orderedStats = collections.OrderedDict(sorted(filter(lambda e: e[1] != {}, stats.items()), key=lambda k: int(k[0])))
 
 	with open("stats.ids.min.json", "w+") as fi:
 		json.dump(orderedStats, fi, separators=(",", ":"))
