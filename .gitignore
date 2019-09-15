@@ -1,0 +1,4 @@
+.vscode
+*.cache.json
+stats.ids.min.json
+stats.json
