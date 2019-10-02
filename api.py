@@ -2,11 +2,12 @@ import os
 import json
 import urllib.request
 import urllib.parse
+from typing import *
 
-use_cache = True
+use_cache: bool = True
 
 
-def get_wiki_api(args, continueKey):
+def get_wiki_api(args: Dict[str, str], continueKey: str) -> Iterator[Any]:
 	args["format"] = "json"
 	while True:
 		url = "https://oldschool.runescape.wiki/api.php?" + urllib.parse.urlencode(args)
@@ -22,7 +23,7 @@ def get_wiki_api(args, continueKey):
 			return
 
 
-def query_category(category_name):
+def query_category(category_name: str) -> Dict[str, str]:
 	"""
 	query_category returns a dict of page title to page wikitext
 	you can then use mwparserfromhell to parse the wikitext into

@@ -1,14 +1,13 @@
 import sys
 import traceback
-import collections
-import json
 import re
 import mwparserfromhell as mw
 import api
 import util
+from typing import *
 
 "this isn't quite right, because 2h, but the format isn't smart enough for that"
-slotIDs = {
+slotIDs: Dict[str, int] = {
 	"weapon": 3,
 	"2h": 3,
 	"body": 4,
@@ -49,37 +48,21 @@ def run():
 					"astab", "aslash", "acrush", "amagic", "arange", "dstab", "dslash", "dcrush", "dmagic", "drange", "str",
 					"rstr", "mdmg", "prayer", "aspeed"
 				]:
-					if key in version:
-						strval = str(version[key]).strip()
-						try:
-							intval = int(strval)
-							if intval != 0:
-								doc[key] = intval
-						except ValueError:
-							print("Item {} has an non integer {}".format(name, key))
+					try:
+						util.copy(key, doc, version, lambda x: int(x))
+					except ValueError:
+						print("Item {} has an non integer {}".format(name, key))
 
 			for (vid, version) in util.each_version("Infobox Item", code):
-				if not "id" in version:
-					print("Item {} missing id".format(name))
-					continue
-				ids = [id for id in map(lambda id: id.strip(), str(version["id"]).split(",")) if id != "" and id.isdigit()]
-
-				if len(ids) == 0:
-					#print("Item {} has a malformed/missing id".format(name))
+				if "removal" in version:
 					continue
 
-				doc = {}
-				for id in ids:
-					if id in stats:
-						print("Item {} ({}) is duplicated".format(id, name))
-					else:
-						stats[id] = doc
+				doc = util.get_doc_for_id_string(name + str(vid), version, stats)
+				if doc == None:
+					continue
 
-				if "quest" in version:
-					quest = str(version["quest"]).lower().strip()
-					if quest != "" and quest != "no":
-						doc["quest"] = True
-
+				util.copy("quest", doc, version, lambda x: x.lower() != "no")
+				
 				equipable = "equipable" in version and "yes" in str(version["equipable"]).strip().lower()
 
 				if "weight" in version:
@@ -109,10 +92,4 @@ def run():
 			print("Item {} failed:".format(name))
 			traceback.print_exc()
 
-	orderedStats = collections.OrderedDict(sorted(filter(lambda e: e[1] != {}, stats.items()), key=lambda k: int(k[0])))
-
-	with open("stats.ids.min.json", "w+") as fi:
-		json.dump(orderedStats, fi, separators=(",", ":"))
-
-	with open("stats.json", "w+") as fi:
-		json.dump(orderedStats, fi, indent=2)
+	util.write_json("stats.json", "stats.ids.min.json", stats)

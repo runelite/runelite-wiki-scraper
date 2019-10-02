@@ -2,3 +2,4 @@
 *.cache.json
 stats.ids.min.json
 stats.json
+.mypy_cache
