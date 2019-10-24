@@ -87,6 +87,7 @@ def run():
 				elif equipable:
 					print("Item {} has equipable but not Infobox Bonuses".format(name))
 					doc["equipable"] = True
+					doc["equipment"] = {}
 
 		except:
 			print("Item {} failed:".format(name))
