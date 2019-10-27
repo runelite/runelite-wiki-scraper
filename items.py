@@ -89,6 +89,8 @@ def run():
 					doc["equipable"] = True
 					doc["equipment"] = {}
 
+		except (KeyboardInterrupt, SystemExit):
+			raise
 		except:
 			print("Item {} failed:".format(name))
 			traceback.print_exc()
