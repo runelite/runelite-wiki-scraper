@@ -3,3 +3,5 @@
 stats.ids.min.json
 stats.json
 .mypy_cache
+npcs.json
+npcs.min.json
