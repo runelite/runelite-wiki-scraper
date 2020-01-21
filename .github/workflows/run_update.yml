@@ -33,11 +33,11 @@ jobs:
         cd srn
         git init
         git remote add upstream https://github.com/runelite/static.runelite.net.git
-        git remote add origin git@github.com:abextm/static.runelite.net.git
+        git remote add origin git@github.com:runelite/static.runelite.net.git
         git fetch upstream
         git checkout upstream/gh-pages
         git checkout -b "$BRANCH_NAME"
         cp ../stats{,.ids.min}.json item/
         git add item/stats{,.ids.min}.json
-        git -c user.name="RuneLite Wiki Scraper" -c user.email="mii7303+rlws@gmail.com" commit -m "Update wiki data"
+        git -c user.name="RuneLite Wiki Scraper" -c user.email="runelite@runelite.net" commit -m "Update wiki data"
         git push -u origin "$BRANCH_NAME"
