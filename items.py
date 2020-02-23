@@ -5,6 +5,7 @@ import mwparserfromhell as mw
 import api
 import util
 from typing import *
+import urllib.request
 
 "this isn't quite right, because 2h, but the format isn't smart enough for that"
 slotIDs: Dict[str, int] = {
@@ -26,7 +27,23 @@ WEIGHT_REDUCTION_EXTRACTOR = re.compile(
 	r"(?i)'''(?:In )?inventory:?''':? ([0-9.-]+){{kg}}<br ?\/?> *'''Equipped:?''':? ([0-9.-]+)")
 
 
+def getLimits():
+	req = urllib.request.Request(
+		'https://oldschool.runescape.wiki/w/Module:GELimits/data?action=raw', headers=api.user_agent)
+	with urllib.request.urlopen(req) as response:
+		data = response.read()
+	limits = {}
+	for line in data.splitlines():
+		match = re.search(r"\[\"(.*)\"\] = (\d+),?", str(line))
+		if match:
+			name = match.group(1).replace('\\', '')
+			limit = match.group(2)
+			limits[name] = int(limit)
+	return limits
+
+
 def run():
+	limits = getLimits()
 	stats = {}
 
 	item_pages = api.query_category("Items")
@@ -62,7 +79,7 @@ def run():
 					continue
 
 				util.copy("quest", doc, version, lambda x: x.lower() != "no")
-				
+
 				equipable = "equipable" in version and "yes" in str(version["equipable"]).strip().lower()
 
 				if "weight" in version:
@@ -88,6 +105,10 @@ def run():
 					print("Item {} has equipable but not Infobox Bonuses".format(name))
 					doc["equipable"] = True
 					doc["equipment"] = {}
+
+				itemName = str(version["name"]).strip()
+				if itemName in limits:
+					doc['ge_limit'] = limits[itemName]
 
 		except (KeyboardInterrupt, SystemExit):
 			raise
