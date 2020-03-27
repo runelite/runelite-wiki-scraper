@@ -106,7 +106,11 @@ def run():
 					doc["equipable"] = True
 					doc["equipment"] = {}
 
-				itemName = str(version["name"]).strip()
+				itemName = name
+				if "gemwname" in version:
+					itemName = str(version["gemwname"]).strip()
+				elif "name" in version:
+					itemName = str(version["name"]).strip()
 				if itemName in limits:
 					doc['ge_limit'] = limits[itemName]
 
