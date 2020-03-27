@@ -24,7 +24,7 @@ slotIDs: Dict[str, int] = {
 }
 
 WEIGHT_REDUCTION_EXTRACTOR = re.compile(
-	r"(?i)'''(?:In )?inventory:?''':? ([0-9.-]+){{kg}}<br ?\/?> *'''Equipped:?''':? ([0-9.-]+)")
+	r"(?i)'''(?:In )?inventory:?''':? ([0-9.-]+) kg<br ?\/?> *'''Equipped:?''':? ([0-9.-]+)")
 
 
 def getLimits():
