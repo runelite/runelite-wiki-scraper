@@ -24,7 +24,10 @@ def run():
 					continue
 				util.copy("name", doc, version, lambda x: x)
 				for key in ["hitpoints", "combat"]:
-					util.copy(key, doc, version, lambda x: int(x))
+					try:
+						util.copy(key, doc, version, lambda x: int(x))
+					except ValueError:
+						print("NPC {} has an non integer {}".format(name, key))
 
 		except (KeyboardInterrupt, SystemExit):
 			raise
