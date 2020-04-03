@@ -75,14 +75,14 @@ def get_doc_for_id_string(source: str, version: Dict[str, str], docs: Dict[str, 
 	return doc
 
 
-def copy(name: str, doc: Dict, version: Dict[str, Any], convert: Callable[[Any], Any]) -> bool:
+def copy(name: str, doc: Dict, version: Dict[str, Any], convert: Callable[[Any], Any], allow_falsey: bool = False) -> bool:
 	if not name in version:
 		return False
 	strval = str(version[name]).strip()
 	if strval == "":
 		return False
 	newval = convert(strval)
-	if not newval:
+	if not allow_falsey and not newval:
 		return False
 	doc[name] = newval
 	return True

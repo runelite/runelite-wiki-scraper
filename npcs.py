@@ -23,11 +23,8 @@ def run():
 				if doc == None:
 					continue
 				util.copy("name", doc, version, lambda x: x)
-				for key in ["hitpoints", "combat"]:
-					try:
-						util.copy(key, doc, version, lambda x: int(x))
-					except ValueError:
-						print("NPC {} has an non integer {}".format(name, key))
+				util.copy('hitpoints', doc, version, lambda x: parse_stat(x))
+				util.copy('combat', doc, version, lambda x: parse_stat(x), allow_falsey = True)
 
 		except (KeyboardInterrupt, SystemExit):
 			raise
@@ -37,7 +34,13 @@ def run():
 
 	for npcId in copy.copy(npcs):
 		npc = npcs[npcId]
-		if not 'combat' in npc:
+		if not 'hitpoints' in npc:
 			del npcs[npcId]
 
 	util.write_json("npcs.json", "npcs.min.json", npcs)
+
+def parse_stat(x: str) -> int:
+	try:
+		return int(x)
+	except (ValueError):
+		return 0
