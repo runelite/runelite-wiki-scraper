@@ -94,3 +94,7 @@ def copy(name: str, doc: Dict, version: Dict[str, Any], convert: Callable[[Any],
 		return False
 	doc[name] = newval
 	return True
+
+
+def has_template(name: str, code) -> bool:
+	return len(code.filter_templates(matches=lambda t: t.name.matches(name))) != 0

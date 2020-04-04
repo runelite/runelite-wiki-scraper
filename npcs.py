@@ -25,21 +25,20 @@ def run():
 				util.copy("name", doc, version)
 				if not "name" in doc:
 					doc["name"] = name
-				for key in ["hitpoints", "combat"]:
-					try:
-						util.copy(key, doc, version, lambda x: int(x))
-					except ValueError:
-						print("NPC {} has an non integer {}".format(name, key))
+
+				scaling = util.has_template("Chambers of Xeric", code) or util.has_template("Theatre of Blood", code)
+				if not scaling:
+					for key in ["hitpoints"]:
+						try:
+							util.copy(key, doc, version, lambda x: int(x))
+						except ValueError:
+							print("NPC {} has an non integer {}".format(name, key))
+
 
 		except (KeyboardInterrupt, SystemExit):
 			raise
 		except:
 			print("NPC {} failed:".format(name))
 			traceback.print_exc()
-
-	for npcId in copy.copy(npcs):
-		npc = npcs[npcId]
-		if not 'combat' in npc:
-			del npcs[npcId]
 
 	util.write_json("npcs.json", "npcs.min.json", npcs)
