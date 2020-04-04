@@ -78,6 +78,10 @@ def run():
 				if doc == None:
 					continue
 
+				util.copy("name", doc, version)
+				if not "name" in doc:
+					doc["name"] = name
+
 				util.copy("quest", doc, version, lambda x: x.lower() != "no")
 
 				equipable = "equipable" in version and "yes" in str(version["equipable"]).strip().lower()

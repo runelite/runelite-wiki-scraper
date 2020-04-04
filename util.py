@@ -37,20 +37,28 @@ def each_version(template_name: str, code) -> Iterator[Tuple[int, Dict[str, Any]
 				yield (versionID, {**base, **versionDict})
 
 
-def write_json(name: str, minName: str, doc: Dict):
-	orderedStats = collections.OrderedDict(
-		sorted(filter(lambda e: e[1] != {},
-		map(lambda e: (e[0], dict(filter(lambda k: not k[0].startswith("__"), e[1].items()))), doc.items())),
-		key=lambda k: int(k[0])))
+def write_json(name: str, minName: str, docs: Dict[Any, Dict[str, Any]]):
+	items = []
+	for (id, doc) in docs.items():
+		named = {k: v for (k, v) in doc.items() if not k.startswith("__")}
+		nameless = named.copy()
+		if "name" in nameless:
+			del nameless["name"]
+		if nameless != {}:
+			items.append((id, named, nameless))
+	items.sort(key=lambda k: int(k[0]))
 
+	withNames = collections.OrderedDict([(k, v) for (k, v, _) in items])
 	with open(name, "w+") as fi:
-		json.dump(orderedStats, fi, indent=2)
+		json.dump(withNames, fi, indent=2)
 
+	withoutNames = collections.OrderedDict([(k, v) for (k, _, v) in items])
 	with open(minName, "w+") as fi:
-		json.dump(orderedStats, fi, separators=(",", ":"))
+		json.dump(withoutNames, fi, separators=(",", ":"))
 
 
-def get_doc_for_id_string(source: str, version: Dict[str, str], docs: Dict[str, Dict], allow_duplicates: bool = False) -> Optional[Dict]:
+def get_doc_for_id_string(source: str, version: Dict[str, str], docs: Dict[str, Dict],
+	allow_duplicates: bool = False) -> Optional[Dict]:
 	if not "id" in version:
 		print("page {} is missing an id".format(source))
 		return None
@@ -75,7 +83,7 @@ def get_doc_for_id_string(source: str, version: Dict[str, str], docs: Dict[str, 
 	return doc
 
 
-def copy(name: str, doc: Dict, version: Dict[str, Any], convert: Callable[[Any], Any]) -> bool:
+def copy(name: str, doc: Dict, version: Dict[str, Any], convert: Callable[[Any], Any] = lambda x: x) -> bool:
 	if not name in version:
 		return False
 	strval = str(version[name]).strip()

@@ -22,7 +22,9 @@ def run():
 				doc = util.get_doc_for_id_string(name + str(vid), version, npcs)
 				if doc == None:
 					continue
-				util.copy("name", doc, version, lambda x: x)
+				util.copy("name", doc, version)
+				if not "name" in doc:
+					doc["name"] = name
 				for key in ["hitpoints", "combat"]:
 					try:
 						util.copy(key, doc, version, lambda x: int(x))
