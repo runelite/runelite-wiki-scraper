@@ -63,7 +63,7 @@ def run():
 
 				for key in [
 					"astab", "aslash", "acrush", "amagic", "arange", "dstab", "dslash", "dcrush", "dmagic", "drange", "str",
-					"rstr", "mdmg", "prayer", "aspeed"
+					"rstr", "mdmg", "prayer", ("speed", "aspeed")
 				]:
 					try:
 						util.copy(key, doc, version, lambda x: int(x))
