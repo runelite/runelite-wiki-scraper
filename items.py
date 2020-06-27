@@ -71,7 +71,7 @@ def run():
 						print("Item {} has an non integer {}".format(name, key))
 
 			for (vid, version) in util.each_version("Infobox Item", code):
-				if "removal" in version:
+				if "removal" in version and str(version["removal"]).strip():
 					continue
 
 				doc = util.get_doc_for_id_string(name + str(vid), version, stats)

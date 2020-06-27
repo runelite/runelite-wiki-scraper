@@ -5,3 +5,4 @@ stats.json
 .mypy_cache
 npcs.json
 npcs.min.json
+__pycache__
