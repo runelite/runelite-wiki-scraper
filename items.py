@@ -62,7 +62,7 @@ def run():
 				slotID = str(version["slot"]).strip().lower()
 				doc["slot"] = slotIDs[slotID]
 				if slotID == "2h":
-					doc["is_2h"] = True
+					doc["is2h"] = True
 
 				for key in [
 					"astab", "aslash", "acrush", "amagic", "arange", "dstab", "dslash", "dcrush", "dmagic", "drange", "str",
