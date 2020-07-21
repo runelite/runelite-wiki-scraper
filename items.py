@@ -59,7 +59,10 @@ def run():
 				doc = {}
 				equips[vid] = doc
 
-				doc["slot"] = slotIDs[str(version["slot"]).strip().lower()]
+				slotID = str(version["slot"]).strip().lower()
+				doc["slot"] = slotIDs[slotID]
+				if slotID == "2h":
+					doc["is2h"] = True
 
 				for key in [
 					"astab", "aslash", "acrush", "amagic", "arange", "dstab", "dslash", "dcrush", "dmagic", "drange", "str",
