@@ -3,7 +3,7 @@ name: Do update
 on:
   schedule:
     - cron: '21 0 * * fri'
-  repository_dispatch:
+  workflow_dispatch:
 
 jobs:
   build:
