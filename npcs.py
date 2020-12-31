@@ -31,7 +31,10 @@ def run():
 
 				scaling = util.has_template("Chambers of Xeric", code) or util.has_template("Theatre of Blood", code)
 				if not scaling:
-					for key in ["hitpoints"]:
+					for key in [
+						"hitpoints", "att", "str", "def", "mage", "range", "attbns", "strbns", "amagic", "mbns", "arange", "rngbns",
+						"dstab", "dslash", "dcrush", "dmagic", "drange"
+					]:
 						try:
 							util.copy(key, doc, version, lambda x: int(x))
 						except ValueError:
