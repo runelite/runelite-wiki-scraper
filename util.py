@@ -83,7 +83,10 @@ def get_doc_for_id_string(source: str, version: Dict[str, str], docs: Dict[str, 
 	return doc
 
 
-def copy(name: Union[str, Tuple[str, str]], doc: Dict, version: Dict[str, Any], convert: Callable[[Any], Any] = lambda x: x) -> bool:
+def copy(name: Union[str, Tuple[str, str]],
+	doc: Dict,
+	version: Dict[str, Any],
+	convert: Callable[[Any], Any] = lambda x: x) -> bool:
 	src_name = name if isinstance(name, str) else name[0]
 	dst_name = name if isinstance(name, str) else name[1]
 	if not src_name in version:

@@ -37,7 +37,6 @@ def run():
 						except ValueError:
 							print("NPC {} has an non integer {}".format(name, key))
 
-
 		except (KeyboardInterrupt, SystemExit):
 			raise
 		except:
