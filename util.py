@@ -7,7 +7,7 @@ from typing import *
 VERSION_EXTRACTOR = re.compile(r"(.*?)([0-9]+)?$")
 
 
-def each_version(template_name: str, code) -> Iterator[Tuple[int, Dict[str, Any]]]:
+def each_version(template_name: str, code, include_base: bool = False) -> Iterator[Tuple[int, Dict[str, Any]]]:
 	"""
 	each_version is a generator that yields each version of an infobox
 	with variants, such as {{Infobox Item}} on [[Ring of charos]]
@@ -33,6 +33,8 @@ def each_version(template_name: str, code) -> Iterator[Tuple[int, Dict[str, Any]
 		if len(versions) == 0:
 			yield (-1, base)
 		else:
+			if include_base:
+				yield (-1, base)
 			for versionID, versionDict in versions.items():
 				yield (versionID, {**base, **versionDict})
 

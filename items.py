@@ -55,7 +55,7 @@ def run():
 			code = mw.parse(page, skip_style_tags=True)
 
 			equips = {}
-			for (vid, version) in util.each_version("Infobox Bonuses", code):
+			for (vid, version) in util.each_version("Infobox Bonuses", code, include_base=True):
 				doc = {}
 				equips[vid] = doc
 
