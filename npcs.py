@@ -19,7 +19,7 @@ def run():
 			code = mw.parse(page, skip_style_tags=True)
 
 			for (vid, version) in util.each_version("Infobox Monster", code):
-				if "removal" in version and str(version["removal"]).strip():
+				if "removal" in version and not str(version["removal"]).strip().lower() in ["", "no"]:
 					continue
 
 				doc = util.get_doc_for_id_string(name + str(vid), version, npcs)
