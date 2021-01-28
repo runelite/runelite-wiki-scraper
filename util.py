@@ -7,11 +7,14 @@ from typing import *
 VERSION_EXTRACTOR = re.compile(r"(.*?)([0-9]+)?$")
 
 
-def each_version(template_name: str, code, include_base: bool = False) -> Iterator[Tuple[int, Dict[str, Any]]]:
+def each_version(template_name: str, code, include_base: bool = False,
+	mergable_keys: List[str] = None) -> Iterator[Tuple[int, Dict[str, Any]]]:
 	"""
 	each_version is a generator that yields each version of an infobox
 	with variants, such as {{Infobox Item}} on [[Ring of charos]]
 	"""
+	if mergable_keys is None:
+		mergable_keys = ["version", "image", "caption"]
 	infoboxes = code.filter_templates(matches=lambda t: t.name.matches(template_name))
 	if len(infoboxes) < 1:
 		return
@@ -33,10 +36,18 @@ def each_version(template_name: str, code, include_base: bool = False) -> Iterat
 		if len(versions) == 0:
 			yield (-1, base)
 		else:
-			if include_base:
-				yield (-1, base)
+			all_mergable = True
 			for versionID, versionDict in versions.items():
-				yield (versionID, {**base, **versionDict})
+				for key in versionDict:
+					if not key in mergable_keys:
+						all_mergable = False
+			if all_mergable:
+				yield (-1, base)
+			else:
+				if include_base:
+					yield (-1, base)
+				for versionID, versionDict in versions.items():
+					yield (versionID, {**base, **versionDict})
 
 
 def write_json(name: str, minName: str, docs: Dict[Any, Dict[str, Any]]):

@@ -77,7 +77,7 @@ def run():
 					except ValueError:
 						print("Item {} has an non integer {}".format(name, key))
 
-			for (vid, version) in util.each_version("Infobox Item", code):
+			for (vid, version) in util.each_version("Infobox Item", code, mergable_keys=None if len(equips) <= 1 else []):
 				if "removal" in version and not str(version["removal"]).strip().lower() in ["", "no"]:
 					continue
 
