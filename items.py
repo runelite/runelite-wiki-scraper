@@ -59,10 +59,14 @@ def run():
 				doc = {}
 				equips[vid] = doc
 
-				slotID = str(version["slot"]).strip().lower()
-				doc["slot"] = slotIDs[slotID]
-				if slotID == "2h":
-					doc["is2h"] = True
+				if "slot" in version:
+					slotID = str(version["slot"]).strip().lower()
+					if slotID in slotIDs:
+						doc["slot"] = slotIDs[slotID]
+						if slotID == "2h":
+							doc["is2h"] = True
+					elif slotID != "?":
+						print("Item {} has unknown slot {}".format(name, slotID))
 
 				for key in [
 					"astab", "aslash", "acrush", "amagic", "arange", "dstab", "dslash", "dcrush", "dmagic", "drange", "str",
