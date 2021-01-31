@@ -4,6 +4,7 @@ import re
 import mwparserfromhell as mw
 import api
 import util
+import csv
 from typing import *
 import urllib.request
 
@@ -41,9 +42,33 @@ def getLimits():
 			limits[name] = int(limit)
 	return limits
 
+def getCombatStyles():
+	combatStyles = {}
+	offset = 0
+	while(True):
+		req = urllib.request.Request(
+			f'https://oldschool.runescape.wiki/w/Special:Ask/format=csv/sort=/order=asc/offset={offset}/limit=500/-5B-5BCombat-20style::+-5D-5D/-3FCombat-20style/mainlabel%3D/prettyprint=true/unescape=true/searchlabel=DCSV'
+			, headers=api.user_agent
+		)
+		with urllib.request.urlopen(req) as response:
+			data = response.read()
+		csvString = data.decode("utf-8")
+		lines = csvString.splitlines()
+		reader = csv.reader(lines)
+		for line in reader:
+			itemName = line[0].split("#", 1)[0] # Remove variations, like (p), (p++) or degraded barrows gear. These will all be the same weapon style.
+			weaponType = line[1]
+			combatStyles[itemName] = weaponType
+		if(len(lines) < 501):
+			break
+		offset += 500	
+
+	return combatStyles
+
 
 def run():
 	limits = getLimits()
+	combatStyles = getCombatStyles()
 	stats = {}
 
 	item_pages = api.query_category("Items")
@@ -63,6 +88,8 @@ def run():
 					slotID = str(version["slot"]).strip().lower()
 					if slotID in slotIDs:
 						doc["slot"] = slotIDs[slotID]
+						if doc["slot"] == 3 and name in combatStyles:
+							doc["combat_style"] = combatStyles[name]
 						if slotID == "2h":
 							doc["is2h"] = True
 					elif slotID != "?":
