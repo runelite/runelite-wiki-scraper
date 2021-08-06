@@ -23,10 +23,6 @@ slotIDs: Dict[str, int] = {
 	"shield": 5
 }
 
-WEIGHT_REDUCTION_EXTRACTOR = re.compile(
-	r"(?i)'''(?:In )?inventory:?''':? ([0-9.-]+) kg<br ?\/?> *'''Equipped:?''':? ([0-9.-]+)")
-
-
 def getLimits():
 	req = urllib.request.Request(
 		'https://oldschool.runescape.wiki/w/Module:GELimits/data?action=raw', headers=api.user_agent)
@@ -96,9 +92,6 @@ def run():
 					if strval.endswith("kg"):
 						strval = strval[:-2].strip()
 					if strval != "":
-						red = WEIGHT_REDUCTION_EXTRACTOR.match(strval)
-						if red:
-							strval = red.group(2)
 						floatval = float(strval)
 						if floatval != 0:
 							doc["weight"] = floatval
