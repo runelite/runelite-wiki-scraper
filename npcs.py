@@ -29,7 +29,7 @@ def run():
 				if not "name" in doc:
 					doc["name"] = name
 
-				scaling = util.has_template("Chambers of Xeric", code) or util.has_template("Theatre of Blood", code) or util.has_template("Tombs of Amascut", code)
+				scaling = "scaledhp" in version and not str(version["scaledhp"]).strip().lower() in ["", "no"]
 				if not scaling:
 					for key in ["hitpoints"]:
 						try:
