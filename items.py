@@ -50,6 +50,9 @@ def run():
 		try:
 			code = mw.parse(page, skip_style_tags=True)
 
+			if util.has_template("Interface items", code) or util.has_template("Unobtainable items", code):
+				continue
+
 			equips = {}
 			for (vid, version) in util.each_version("Infobox Bonuses", code, include_base=True):
 				doc = {}
