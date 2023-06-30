@@ -7,7 +7,7 @@ verify_ssl = true
 mwparserfromhell = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.10"
 
 [dev-packages]
 mypy = "*"
