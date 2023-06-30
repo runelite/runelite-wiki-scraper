@@ -25,7 +25,7 @@ slotIDs: Dict[str, int] = {
 
 def getLimits():
 	req = urllib.request.Request(
-		'https://oldschool.runescape.wiki/w/Module:GELimits/data?action=raw', headers=api.user_agent)
+		'https://oldschool.runescape.wiki/w/Module:GELimits/data.json?action=raw', headers=api.user_agent)
 	with urllib.request.urlopen(req) as response:
 		data = response.read()
 	limits = {}
