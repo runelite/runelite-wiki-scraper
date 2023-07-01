@@ -6,6 +6,7 @@ import api
 import util
 from typing import *
 import urllib.request
+import json
 
 "this isn't quite right, because 2h, but the format isn't smart enough for that"
 slotIDs: Dict[str, int] = {
@@ -27,14 +28,12 @@ def getLimits():
 	req = urllib.request.Request(
 		'https://oldschool.runescape.wiki/w/Module:GELimits/data.json?action=raw', headers=api.user_agent)
 	with urllib.request.urlopen(req) as response:
-		data = response.read()
+		data = json.loads(response.read())
 	limits = {}
-	for line in data.splitlines():
-		match = re.search(r"\[\"(.*)\"\] = (\d+),?", str(line))
-		if match:
-			name = match.group(1).replace('\\', '')
-			limit = match.group(2)
-			limits[name] = int(limit)
+	for itemname in data:
+		if itemname.startswith('%'):
+			continue
+		limits[itemname] = int(data[itemname])
 	return limits
 
 
