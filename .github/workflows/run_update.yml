@@ -42,5 +42,5 @@ jobs:
         cp ../npcs{,.min}.json npcs
         git add item/stats{,.ids.min}.json
         git add npcs/npcs{,.min}.json
-        git -c user.name="RuneLite Wiki Scraper" -c user.email="runelite@runelite.net" commit -m "Update wiki data"
+        git -c user.name="RuneLite Wiki Scraper" -c user.email="runelite@runelite.net" commit -m "Update wiki data" || exit 0
         git push -u origin "$BRANCH_NAME"
