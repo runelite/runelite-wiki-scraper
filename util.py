@@ -21,6 +21,12 @@ def each_version(template_name: str, code, include_base: bool = False,
 	for infobox in infoboxes:
 		base: Dict[str, str] = {}
 		versions: Dict[int, Dict[str, str]] = {}
+		version_keys = {str(p.name).strip() for p in infobox.params if p.startswith("version")}
+		for i in range(1, 126):
+			if not f"version{i}" in version_keys:
+				break
+			versions[i] = {}
+
 		for param in infobox.params:
 			matcher = VERSION_EXTRACTOR.match(str(param.name).strip())
 			if matcher is None:
@@ -30,7 +36,8 @@ def each_version(template_name: str, code, include_base: bool = False,
 			if matcher.group(2) != None:
 				version = int(matcher.group(2))
 				if not version in versions:
-					versions[version] = {}
+					# ignore this version
+					continue
 				dic = versions[version]
 			dic[primary] = param.value
 		if len(versions) == 0:
