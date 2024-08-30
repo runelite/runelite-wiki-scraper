@@ -65,10 +65,13 @@ def run():
 							doc["is2h"] = True
 					elif slotID != "?":
 						print("Item {} has unknown slot {}".format(name, slotID))
+						
+				if "attackrange" in version and str(version["attackrange"]).strip().lower() == "staff":
+					version["attackrange"] = 1
 
 				for key in [
 					"astab", "aslash", "acrush", "amagic", "arange", "dstab", "dslash", "dcrush", "dmagic", "drange", "str",
-					"rstr", "mdmg", "prayer", ("speed", "aspeed")
+					"rstr", "mdmg", "prayer", "attackrange", ("speed", "aspeed")
 				]:
 					try:
 						util.copy(key, doc, version, lambda x: int(x))
