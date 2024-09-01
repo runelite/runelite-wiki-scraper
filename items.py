@@ -68,12 +68,16 @@ def run():
 
 				for key in [
 					"astab", "aslash", "acrush", "amagic", "arange", "dstab", "dslash", "dcrush", "dmagic", "drange", "str",
-					"rstr", "mdmg", "prayer", ("speed", "aspeed")
+					"rstr", "prayer", ("speed", "aspeed")
 				]:
 					try:
 						util.copy(key, doc, version, lambda x: int(x))
 					except ValueError:
 						print("Item {} has an non integer {}".format(name, key))
+				try:
+					util.copy("mdmg", doc, version, lambda x: float(x))
+				except ValueError:
+					print("Item {} has non-float mdmg value {}".format(name, str(version["mdmg"]).strip()))
 
 			for (vid, version) in util.each_version("Infobox Item", code, mergable_keys=None if len(equips) <= 1 else []):
 				if "removal" in version and not str(version["removal"]).strip().lower() in ["", "no", "n/a"]:
