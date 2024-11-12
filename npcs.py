@@ -6,6 +6,7 @@ import util
 from typing import *
 import copy
 
+COMMENT_PATTERN = re.compile("(<!--.*?-->)", flags=re.DOTALL)
 
 def run():
 	npcs = {}
@@ -33,7 +34,7 @@ def run():
 				if not scaling:
 					for key in ["hitpoints"]:
 						try:
-							util.copy(key, doc, version, lambda x: int(x))
+							util.copy(key, doc, version, lambda x: int(re.sub(COMMENT_PATTERN, "", x)))
 						except ValueError:
 							print("NPC {} has an non integer {}".format(name, key))
 
