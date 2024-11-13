@@ -5,6 +5,7 @@ import mwparserfromhell as mw
 from typing import *
 
 VERSION_EXTRACTOR = re.compile(r"(.*?)([0-9]+)?$")
+COMMENT_PATTERN = re.compile("(<!--.*?-->)", flags=re.DOTALL)
 
 
 def each_version(template_name: str, code, include_base: bool = False,
@@ -114,7 +115,7 @@ def copy(name: Union[str, Tuple[str, str]],
 	strval = str(version[src_name]).strip()
 	if strval == "":
 		return False
-	newval = convert(strval)
+	newval = convert(re.sub(COMMENT_PATTERN, "", strval))
 	if not newval:
 		return False
 	doc[dst_name] = newval
