@@ -8,8 +8,6 @@ from typing import *
 import urllib.request
 import json
 
-COMMENT_PATTERN = re.compile("(<!--.*?-->)", flags=re.DOTALL)
-
 "this isn't quite right, because 2h, but the format isn't smart enough for that"
 slotIDs: Dict[str, int] = {
 	"weapon": 3,
@@ -73,11 +71,11 @@ def run():
 					"rstr", "prayer", ("speed", "aspeed")
 				]:
 					try:
-						util.copy(key, doc, version, lambda x: int(re.sub(COMMENT_PATTERN, "", x)))
+						util.copy(key, doc, version, lambda x: int(x))
 					except ValueError:
 						print("Item {} has an non integer {}".format(name, key))
 				try:
-					util.copy("mdmg", doc, version, lambda x: float(re.sub(COMMENT_PATTERN, "", x)))
+					util.copy("mdmg", doc, version, lambda x: float(x))
 				except ValueError:
 					print("Item {} has non-float mdmg value {}".format(name, str(version["mdmg"]).strip()))
 
