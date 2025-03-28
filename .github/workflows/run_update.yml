@@ -39,6 +39,7 @@ jobs:
         git checkout -b "$BRANCH_NAME"
         mkdir -p item npcs
         cp ../stats{,.ids.min}.json item/
+        cp ../ge_limits.ids.min.json item/
         cp ../npcs{,.min}.json npcs
         git add item/stats{,.ids.min}.json
         git add npcs/npcs{,.min}.json

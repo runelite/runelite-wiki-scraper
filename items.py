@@ -129,3 +129,7 @@ def run():
 			traceback.print_exc()
 
 	util.write_json("stats.json", "stats.ids.min.json", stats)
+
+	limits_out = {k: v['ge_limit'] for (k, v) in stats.items() if 'ge_limit' in v and v['ge_limit'] is not None}
+	with open("ge_limits.ids.min.json", "w+") as fi:
+		json.dump(limits_out, fi, separators=(",", ":"))
