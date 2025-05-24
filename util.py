@@ -84,7 +84,8 @@ def get_doc_for_id_string(source: str, version: Dict[str, str], docs: Dict[str, 
 		print("page {} is missing an id".format(source))
 		return None
 
-	ids = [id for id in map(lambda id: id.strip(), str(version["id"]).split(",")) if id != "" and id.isdigit()]
+	version["id"] = re.sub(COMMENT_PATTERN, "", str(version["id"]).strip())
+	ids = [id for id in map(lambda id: id.strip(), version["id"].split(",")) if id != "" and id.isdigit()]
 
 	if len(ids) == 0:
 		print("page {} is has an empty id".format(source))
