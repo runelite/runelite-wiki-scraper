@@ -1,4 +1,5 @@
 .vscode
+.idea
 *.cache.json
 stats.ids.min.json
 stats.json
